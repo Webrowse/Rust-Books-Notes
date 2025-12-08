@@ -15,3 +15,4 @@ by Tim McNamara
 by Luca Palmieri
 
 5. The Rustonomicon (unsafe bible).
+[Rust Doc Link](https://doc.rust-lang.org/nomicon/meet-safe-and-unsafe.html)

@@ -16,4 +16,21 @@ Practically, **Stack = Lifetime**
 
 ### Heap
 
-Value in heap exists till they are deallocated.
+Value in heap exists till they are deallocated.  
+Primary way is `Box::new(value)`, you get back a `Box<T>` pointer.  
+when box is dropped, that memory is freed.  
+If you forget to deallocate the memory in Heap, your app will eventually eat up all the memory on your machine,  
+called 'leaking memory'.  
+we can leak memory explicitly in some usecase, for e.g. for read-only config that is required by whole program,  
+`Box::leak` will get a `'static` reference to it.  
+
+### Static 
+
+These region automatically loaded in the memory when program is called.  
+Static memory lives throughout the dureation of the program. It contain the program's binary code.  
+`'static` variable is allocated at the start of the program & is not deallocated before program shuts down.   
+It is useful in trait bounds, `T: 'static`, T can live as long as we want it to live, as long as T is owned and self-sufficient.  
+or it has not borrowed other non-static values.  
+Ex. `std::thread:spawn`, a new thread may outlive the current thread.  
+So we cannot refer anything in new thread that stores its value in old thread. Unless it is going to live throughout the program.
+
