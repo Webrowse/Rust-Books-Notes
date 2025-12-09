@@ -34,3 +34,8 @@ or it has not borrowed other non-static values.
 Ex. `std::thread:spawn`, a new thread may outlive the current thread.  
 So we cannot refer anything in new thread that stores its value in old thread. Unless it is going to live throughout the program.
 
+### Ownership
+
+Heap stored variables are non-copy type by default. When the variable goes out of scope, its memory ideally should be deallocated.  
+If Box type were Copy, Box2 = Box1, Both Box would assume ownership & will try to free the memory, double-free is a huge problem.
+
