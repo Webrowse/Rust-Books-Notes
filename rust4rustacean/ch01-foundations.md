@@ -73,3 +73,54 @@ fn main() {
 - UnsafeCell (forbidden)
 
 
+## Lifetimes
+
+A *lifetime* is a name of a region of code that some reference must be valid for. While the lifetime will frequently coincide with a scope, it does not have to.
+
+### Lifetimes and the Borrow Checker
+
+when 'a is used, borrow checker checks if 'a is still alive. It verifies through the point of using ref to the point of origin, and if there was no conflict. Similar to High-level Data Flow.
+
+```rust
+let mut x = Box::new(42);
+let r = &x;                 // 'a starts
+if randomFn() > 0.5 {
+    *x = 84;                // data muted, now cannot use r here, because r points to the old x.
+} else {
+    println!("{}", r);      // 'a used here, 
+}
+```
+
+If borrow checker is not sure, it will simply rejects. That is why we have Unsafe{}.
+
+### Generic Lifetimes
+
+```rust
+struct StrSplit<'s, 'p> {
+ delimiter: &'p str,
+ document: &'s str,
+}
+impl<'s, 'p> Iterator for StrSplit<'s, 'p> {
+ type Item = &'s str;
+ fn next(&self) -> Option<Self::Item> {
+ todo!()
+ }
+}
+fn str_before(s: &str, c: char) -> Option<&str> {
+ StrSplit { document: s, delimiter: &c.to_string() }.next()
+}
+```
+
+We had to gave different lifetime to both limiter and document, to let borrow checker know we meant document while asking for next().
+
+### Lifetime Variance
+
+to be understood later, along with this code:
+```rust
+struct MutStr<'a, 'b> {
+    s: &'a mut &'b str
+}
+let mut s = "hello";
+*MutStr { s: &mut s }.s = "world";
+println!("{}", s);
+```
