@@ -34,8 +34,42 @@ or it has not borrowed other non-static values.
 Ex. `std::thread:spawn`, a new thread may outlive the current thread.  
 So we cannot refer anything in new thread that stores its value in old thread. Unless it is going to live throughout the program.
 
-### Ownership
+## Ownership
 
 Heap stored variables are non-copy type by default. When the variable goes out of scope, its memory ideally should be deallocated.  
 If Box type were Copy, Box2 = Box1, Both Box would assume ownership & will try to free the memory, double-free is a huge problem.
+
+## Borrowing and Lifetimes
+
+The primary difference between owning a value and having a mutable reference to it is that the owner is responsible for dropping the value when it is no longer necessary.  
+```rust
+let x = 42;
+let mut y = &x; // y is of type &i32
+let z = &mut y; // z is of type &mut &i32
+```
+
+if you move the value behind the `&mut`, then you must leave another value in its place, or owner would feel the need to drop the value, and it will find none.
+
+```rust
+fn main() {
+    let mut s = Box::new(42);
+    replace_with_84(&mut s);
+}
+ fn replace_with_84(s: &mut Box<i32>) {
+    println!("before: {}", s); // 42
+    let was = std::mem::take(s);
+    println!("after: {}", s);  // 0
+    println!("was value before: {}", was);  // 42
+    *s = was;      // s == was == 42
+    let mut r = Box::new(84);
+    std::mem::swap(s, &mut r);
+    assert_ne!(*r, 84);  // r = 42 after swap, so it passes the unequal test
+}
+```
+
+### Interior Mutability
+- Mutex
+- RefCell
+- UnsafeCell (forbidden)
+
 
