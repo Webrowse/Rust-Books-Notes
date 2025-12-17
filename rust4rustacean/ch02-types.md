@@ -50,3 +50,7 @@ In realilty, it only copies the part that you are using, That is why you never c
 
 **Trait Object Safety**: A trait that cannot be used as a dyn Trait is not object-safe, usually because its methods return Self or are themselves generic   
 
+**Marker Traits:**: Traits that have no methods (eg Send, Sync, Copy) and only signal a specific property or ability of a type.  
+Many are automatically implemented by the compiler (called auto-traits), unless component explicitly opts out.  
+
+**Existential Types**: The `impl Trait`, when return type is unnamed. (-> impl Debug {}). This lets you return something whose precise type is hidden, allowing you to change the underlying implementation without breaking user code.
