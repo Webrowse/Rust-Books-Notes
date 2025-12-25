@@ -26,3 +26,9 @@ Your code should avoid unnecessary restrictions on the callers.
 - *Generics vs. Trait Objects*: Generics (static dispatch) are faster but can bloat binary size. Trait objects (&dyn Trait) can keep code cleaner and reduce compile times, but they require the trait to be object-safe.  
 - *Borrowed vs. Owned*: If your function doesn't need to own data, use a reference. If it's unclear, the Cow (Clone-on-Write) type is useful for handling both borrowed and owned data efficiently.
 
+### 3. Obvious
+An interface should be hard to use incorrectly and its behavior should be clear.  
+- *Documentation*: Clearly document cases where the code might panic or return an error, and provide end-to-end examples.  
+- *Semantic Typing*: Use specific types instead of primitives to prevent mistakes. For example, using a custom enum is better than using three bool arguments in a row, which a user could easily swap by accident.  
+- *Marker Types*: You can use zero-sized types and generics to enforce rules at compile time. An example is a Rocket type that can only call launch() when it is in the Grounded state.  
+- *Must Use*: Use the #[must_use] attribute on types like Result to warn users if they forget to handle a return value.
