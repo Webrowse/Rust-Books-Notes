@@ -22,4 +22,7 @@ Consider providing implementations for &T if T implements the traits. It makes t
 ### 2. Flexible
 
 Your code should avoid unnecessary restrictions on the callers.  
-*Generic Arguments*: 
+- *Generic Arguments*: Use generics to allow different input types. For example, taking impl AsRef<str> is more flexible than taking a concrete &str because it accepts more types.  
+- *Generics vs. Trait Objects*: Generics (static dispatch) are faster but can bloat binary size. Trait objects (&dyn Trait) can keep code cleaner and reduce compile times, but they require the trait to be object-safe.  
+- *Borrowed vs. Owned*: If your function doesn't need to own data, use a reference. If it's unclear, the Cow (Clone-on-Write) type is useful for handling both borrowed and owned data efficiently.
+
