@@ -32,3 +32,10 @@ An interface should be hard to use incorrectly and its behavior should be clear.
 - *Semantic Typing*: Use specific types instead of primitives to prevent mistakes. For example, using a custom enum is better than using three bool arguments in a row, which a user could easily swap by accident.  
 - *Marker Types*: You can use zero-sized types and generics to enforce rules at compile time. An example is a Rocket type that can only call launch() when it is in the Grounded state.  
 - *Must Use*: Use the #[must_use] attribute on types like Result to warn users if they forget to handle a return value.
+
+### 4. Constrained
+A well-designed API limits what the user can do to ensure you can safely change the internals later.  
+- Visibility: Use pub(crate) to keep types internal unless they absolutely need to be public.  
+- Non-exhaustive: Use the #[non_exhaustive] attribute on structs or enums. This allows you to add new fields or variants in the future without breaking the user's code.  
+- Sealed Traits: If you want to define a trait that users can use but cannot implement themselves, use a "sealed trait". This is done by adding a private "supertrait" that the user cannot access.  
+- Auto-Traits: Be careful with Send and Sync; adding a non-thread-safe private field to a public struct can accidentally remove these traits from your public API, which is a breaking change
