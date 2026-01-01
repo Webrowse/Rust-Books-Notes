@@ -10,4 +10,13 @@ These are the most common macros. They act like a compiler-assisted search and r
     * Matchers: The "if" part that looks for a specific pattern in your input.  
     * Transcribers: The "then" part that defines what code should be generated.
 - **Hygiene**: Declarative macros are hygienic, meaning they live in their own "universe". They cannot accidentally use or overwrite variables from the code where they are called unless you explicitly pass those variables in.  
-- **Scoping**: They follow "textual scoping," meaning you must define a macro before you can use it in a file.
+- **Scoping**: They follow "textual scoping," meaning you must define a macro before you can use it in a file.  
+
+# 2. Procedural Macros
+These are more powerful and act like a source code preprocessor. You write a separate Rust function that takes in tokens, performs logic on them, and spits out new tokens.  
+- Three Types:
+    1. Function-like: Called like a function (my_macro!()).  
+    2. Attribute: Attached to an item to transform it (like #[tokio::main]).  
+    3. Derive: Adds new code after a struct or enum (like #[derive(Serialize)]).   
+- The Cost: They can increase compile times because they often require heavy libraries (like syn for parsing) and generate a lot of hidden code that the compiler still has to process.
+- Hygiene: Unlike declarative macros, these are not hygienic by default. You must use Spans to manually tell the compiler which parts of the generated code belong to which scope.
