@@ -12,7 +12,7 @@ These are the most common macros. They act like a compiler-assisted search and r
 - **Hygiene**: Declarative macros are hygienic, meaning they live in their own "universe". They cannot accidentally use or overwrite variables from the code where they are called unless you explicitly pass those variables in.  
 - **Scoping**: They follow "textual scoping," meaning you must define a macro before you can use it in a file.  
 
-# 2. Procedural Macros
+## 2. Procedural Macros
 These are more powerful and act like a source code preprocessor. You write a separate Rust function that takes in tokens, performs logic on them, and spits out new tokens.  
 - Three Types:
     1. Function-like: Called like a function (my_macro!()).  
@@ -20,3 +20,9 @@ These are more powerful and act like a source code preprocessor. You write a sep
     3. Derive: Adds new code after a struct or enum (like #[derive(Serialize)]).   
 - The Cost: They can increase compile times because they often require heavy libraries (like syn for parsing) and generate a lot of hidden code that the compiler still has to process.
 - Hygiene: Unlike declarative macros, these are not hygienic by default. You must use Spans to manually tell the compiler which parts of the generated code belong to which scope.
+
+## 3. Key Concepts to Remember
+-  **Macros vs. Generics**: If your code needs to change based on a type, use generics. If your code needs to change based on structure (like repeating a block of code), use macros.  
+- **Spans**: These link the generated code back to your original source file. They are why, when a macro makes a mistake, the compiler can still point to the exact line in your file where you called the macro.  
+- **TokenStream**: This is the "raw material" procedural macros work with. It is a sequence of tokens that represents your code.  
+- **Validation**: Declarative macros are safe because they must produce valid Rust code; the macro definition itself won't compile if the output it generates is invalid.  
